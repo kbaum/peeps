@@ -96,6 +96,8 @@ GEM
       pry (>= 0.10.4)
     public_suffix (3.0.3)
     puma (3.12.0)
+    pundit (2.0.0)
+      activesupport (>= 3.0.0)
     rack (2.0.5)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -183,6 +185,7 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma (~> 3.7)
+  pundit
   rails (~> 5.1.4)
   sass-rails (~> 5.0)
   selenium-webdriver
