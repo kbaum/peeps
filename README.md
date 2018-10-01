@@ -10,6 +10,8 @@ https://github.com/cerebris/peeps
 
 ## Namespaced JSON APIS
 
+### Reference Pundit Policy within Our Resources
+
 In order to create a namespaced resource for a `PhoneNumber` resource under the namespace `Bar`, we need to create namespaced route entry in our routes file:
 
 ```ruby
@@ -71,6 +73,10 @@ end
 ```
 
 ## Namespaced Pundit Policies
+
+This section describes two approaches. In the first approach we hook into pundit ourselves. The second approach briefly describes what we do today with jsonapi-authorization.
+
+### Hooking Directory Into Pundit Ourselves
 
 For this example, we will have one policy for PhoneNumber and another for Bar::PhoneNumber. First define the two policies:
 
@@ -139,5 +145,8 @@ We cannot for the bar namespace:
 curl -i -H "Accept: application/vnd.api+json" -H 'Content-Type:application/vnd.api+json' -X POST -d '{ "data": { "type": "phone-numbers", "relationships": { "contact": { "data": { "type": "contacts", "id": "1" } } }, "attributes": { "name": "home", "phone-number": "(603) 555-1212" } } }' http://localhost:3000/bar/phone-numbers
 ```
 
+### Using jsonapi-authorization custom authorizer
+
+If we instead go with jsonapi-authorization, we can define a [custom authorizor](https://github.com/venuu/jsonapi-authorization#configuration). The jsonapi-authorization library comes with it's own [DefaultPunditAuthorizor](https://github.com/venuu/jsonapi-authorization/blob/master/lib/jsonapi/authorization/default_pundit_authorizer.rb) but it does not provide a way to customize the location of the pundity policy. As a result, in the current liftforward/api project, we define our own [authorizor](https://github.com/liftforward/api/blob/master/app/jsonapi/namespaced_pundit_authorizer.rb) which allows for picking a policy based on the resource's namespace. This policy seems to be a copy and paste of the default_pundity_authorizer with the added ability to have namespaced pundit policies.
 
 
